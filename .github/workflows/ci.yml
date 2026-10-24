@@ -45,7 +45,7 @@ jobs:
 
       - name: Install frontend dependencies
         working-directory: server/frontend
-        run: npm ci
+        run: npm install --no-audit --no-fund
 
       - name: Build React frontend
         working-directory: server/frontend
