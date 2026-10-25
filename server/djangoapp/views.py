@@ -1,65 +1,107 @@
-# Uncomment the required imports before adding the code
-
-# from django.shortcuts import render
-# from django.http import HttpResponseRedirect, HttpResponse
-# from django.contrib.auth.models import User
-# from django.shortcuts import get_object_or_404, render, redirect
-# from django.contrib.auth import logout
-# from django.contrib import messages
-# from datetime import datetime
-
-from django.http import JsonResponse
-from django.contrib.auth import login, authenticate
-import logging
 import json
+import os
+import requests
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-# from .populate import initiate
+from .models import CarModel
 
+NODE_API = os.getenv("DEALERSHIP_API_URL", "http://127.0.0.1:3030")
 
-# Get an instance of a logger
-logger = logging.getLogger(__name__)
+def _node_get(endpoint):
+    response = requests.get(f"{NODE_API}/{endpoint}", timeout=10)
+    response.raise_for_status()
+    return response.json()
 
+def _sentiment(review):
+    text = (review or "").lower()
+    positive = ("excellent", "great", "good", "helpful", "fantastic", "smooth", "best")
+    negative = ("bad", "poor", "terrible", "worst", "damaged", "slow", "rude")
+    score = sum(word in text for word in positive) - sum(word in text for word in negative)
+    return "positive" if score > 0 else "negative" if score < 0 else "neutral"
 
-# Create your views here.
-
-# Create a `login_request` view to handle sign in request
 @csrf_exempt
 def login_user(request):
-    # Get username and password from request.POST dictionary
-    data = json.loads(request.body)
-    username = data['userName']
-    password = data['password']
-    # Try to check if provide credential can be authenticated
-    user = authenticate(username=username, password=password)
-    data = {"userName": username}
-    if user is not None:
-        # If user is valid, call login method to login current user
-        login(request, user)
-        data = {"userName": username, "status": "Authenticated"}
-    return JsonResponse(data)
+    if request.method != "POST":
+        return JsonResponse({"error": "POST required"}, status=405)
+    try:
+        data = json.loads(request.body or b"{}")
+    except (ValueError, UnicodeDecodeError):
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    username = data.get("userName", "")
+    user = authenticate(request, username=username, password=data.get("password", ""))
+    if user is None:
+        return JsonResponse({"userName": username, "error": "Invalid credentials"}, status=401)
+    login(request, user)
+    return JsonResponse({"userName": username, "status": "Authenticated"})
 
-# Create a `logout_request` view to handle sign out request
-# def logout_request(request):
-# ...
+def logout_request(request):
+    logout(request)
+    return JsonResponse({"status": "Logged out"})
 
-# Create a `registration` view to handle sign up request
-# @csrf_exempt
-# def registration(request):
-# ...
+@csrf_exempt
+def registration(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "POST required"}, status=405)
+    try:
+        data = json.loads(request.body or b"{}")
+    except (ValueError, UnicodeDecodeError):
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    username = data.get("userName", "").strip()
+    password = data.get("password", "")
+    if not username or not password:
+        return JsonResponse({"message": "Username and password are required."}, status=400)
+    if User.objects.filter(username=username).exists():
+        return JsonResponse({"message": "Username already exists."}, status=409)
+    user = User.objects.create_user(
+        username=username, password=password,
+        first_name=data.get("firstName", ""),
+        last_name=data.get("lastName", ""),
+        email=data.get("email", ""),
+    )
+    return JsonResponse({"message": "Registration successful. You can now log in.", "userName": user.username}, status=201)
 
-# # Update the `get_dealerships` view to render the index page with
-# a list of dealerships
-# def get_dealerships(request):
-# ...
+def get_dealerships(request, state=None):
+    try:
+        endpoint = "fetchDealers" if not state or state.lower() == "all" else f"fetchDealers/{state}"
+        return JsonResponse({"status": 200, "dealers": _node_get(endpoint)})
+    except requests.RequestException as error:
+        return JsonResponse({"status": 503, "error": str(error)}, status=503)
 
-# Create a `get_dealer_reviews` view to render the reviews of a dealer
-# def get_dealer_reviews(request,dealer_id):
-# ...
+def get_dealer_details(request, dealer_id):
+    try:
+        return JsonResponse({"status": 200, "dealer": _node_get(f"fetchDealer/{dealer_id}")})
+    except requests.RequestException as error:
+        return JsonResponse({"status": 503, "error": str(error)}, status=503)
 
-# Create a `get_dealer_details` view to render the dealer details
-# def get_dealer_details(request, dealer_id):
-# ...
+def get_dealer_reviews(request, dealer_id):
+    try:
+        reviews = _node_get(f"fetchReviews/dealer/{dealer_id}")
+        for review in reviews:
+            review["sentiment"] = _sentiment(review.get("review", ""))
+        return JsonResponse({"status": 200, "reviews": reviews})
+    except requests.RequestException as error:
+        return JsonResponse({"status": 503, "error": str(error)}, status=503)
 
-# Create a `add_review` view to submit a review
-# def add_review(request):
-# ...
+@csrf_exempt
+def add_review(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "POST required"}, status=405)
+    try:
+        data = json.loads(request.body or b"{}")
+    except (ValueError, UnicodeDecodeError):
+        return JsonResponse({"status": 400, "error": "Invalid JSON"}, status=400)
+    try:
+        response = requests.post(f"{NODE_API}/insert_review", json=data, timeout=10)
+        response.raise_for_status()
+        return JsonResponse({"status": 200, "review": response.json()})
+    except requests.RequestException as error:
+        return JsonResponse({"status": 503, "error": str(error)}, status=503)
+
+def get_cars(request):
+    cars = CarModel.objects.select_related("car_make").order_by("car_make__Name", "Name")
+    return JsonResponse({"CarModels": [
+        {"CarMake": car.car_make.Name, "CarModel": car.Name, "Year": car.Year, "Type": car.Type}
+        for car in cars
+    ]})
