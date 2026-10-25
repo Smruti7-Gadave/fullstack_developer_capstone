@@ -105,17 +105,27 @@ app.post("/insert_review", async (req, res) => {
       return res.status(400).json({ error: "Dealership and car year must be valid integers" });
     }
 
+    const normalized = {
+      name: String(data.name).trim(),
+      dealership: dealerId,
+      review: String(data.review).trim(),
+      purchase: Boolean(data.purchase),
+      purchase_date: String(data.purchase_date),
+      car_make: String(data.car_make).trim(),
+      car_model: String(data.car_model).trim(),
+      car_year: year
+    };
+
+    // Treat an identical repeat submission as a retry, not a new review.
+    const duplicate = await Reviews.findOne(normalized).lean();
+    if (duplicate) {
+      return res.status(200).json({ ...duplicate, duplicate: true });
+    }
+
     const lastReview = await Reviews.findOne().sort({ id: -1 }).select("id").lean();
     const newReview = new Reviews({
       id: lastReview ? lastReview.id + 1 : 1,
-      name: String(data.name),
-      dealership: dealerId,
-      review: String(data.review),
-      purchase: Boolean(data.purchase),
-      purchase_date: String(data.purchase_date),
-      car_make: String(data.car_make),
-      car_model: String(data.car_model),
-      car_year: year
+      ...normalized
     });
 
     const saved = await newReview.save();
