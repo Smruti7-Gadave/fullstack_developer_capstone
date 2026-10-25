@@ -5,163 +5,168 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - Best Cars Dealership</title>
 
-    <!-- Load Bootstrap first and the custom stylesheet after it. -->
-    <link rel="stylesheet" href="/static/bootstrap.min.css">
+    <!-- Match the stylesheet paths used by the dealership home page. -->
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
 
     <style>
-        .about-shell {
+        .about-card {
             width: 90%;
-            margin: 35px auto;
-            padding: 25px;
+            margin: 5% auto;
+            padding: 20px;
         }
 
         .about-header {
+            padding: 24px 18px;
             text-align: center;
-            padding: 25px 15px;
+        }
+
+        .team-heading {
+            text-align: center;
+            margin: 18px 0;
         }
 
         .team-row {
             display: flex;
+            flex-direction: row;
             flex-wrap: wrap;
-            align-items: stretch;
-            gap: 0;
+            justify-content: space-around;
+            margin: auto;
+            gap: 16px;
         }
 
-        .team-card {
-            height: 100%;
-            margin: 12px 0;
-            overflow: hidden;
+        .team-member {
+            width: 30%;
+            min-width: 240px;
+            margin: 0 0 20px;
         }
 
-        .team-card .card-img-top {
-            display: block;
+        .team-member .card-img-top {
             width: 100%;
             height: 260px;
             object-fit: cover;
         }
 
-        .team-card .card-body {
+        .team-member .card-body {
             text-align: center;
         }
 
-        .team-card .team-name {
-            margin: 10px 0;
-            font-size: 22px;
+        .team-member .title {
+            font-size: 20px;
             font-weight: 600;
         }
 
-        .team-card .team-role {
+        .team-role {
+            font-weight: 700;
             color: #315c78;
-            font-weight: 600;
         }
 
-        .team-card .team-email {
+        .team-email {
             overflow-wrap: anywhere;
         }
     </style>
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color: darkturquoise;">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">Dealerships</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarText" aria-controls="navbarText"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarText">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/about">About Us</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/contact">Contact Us</a>
-                </li>
-            </ul>
+<div>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: darkturquoise; height: 1in;">
+        <div class="container-fluid">
+            <h2 style="padding-right: 5%;">Dealerships</h2>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarText" aria-controls="navbarText"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" style="font-size: larger;" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" style="font-size: larger;"
+                           aria-current="page" href="/about">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="font-size: larger;" href="/contact">Contact Us</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<main class="container">
-    <section class="card about-shell">
+    <main class="card about-card">
         <header class="banner about-header" id="about-header" name="about-header">
             <h1>About Us</h1>
             <p class="lead">
-                Welcome to Best Cars Dealership, where we offer a selection of domestic
-                and imported vehicles at competitive prices.
+                Welcome to Best Cars dealership, home to the best cars in North America.
+                We deal in sale of domestic and imported cars at reasonable prices.
             </p>
             <p>
-                Our team is committed to helping customers choose the right vehicle.
-                We focus on dependable cars, clear information, and friendly customer service.
+                Our team is committed to helping customers find the right vehicle.
+                We provide knowledgeable guidance, dependable service, and support throughout
+                the car-buying experience.
             </p>
         </header>
 
-        <section class="row team-row" aria-label="Our team">
-            <div class="col-md-4">
-                <article class="card team-card">
-                    <img class="card-img-top"
-                         src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
-                         alt="Portrait of Alex Morgan, General Manager">
-                    <div class="card-body">
-                        <h2 class="team-name">Alex Morgan</h2>
-                        <p class="team-role">General Manager</p>
-                        <p class="card-text">
-                            Alex oversees dealership operations and vehicle quality.
-                            He works with the team to make every customer visit helpful and straightforward.
-                        </p>
-                        <p class="team-email">
-                            <a href="mailto:alex.morgan@bestcarsdealership.com">alex.morgan@bestcarsdealership.com</a>
-                        </p>
-                    </div>
-                </article>
-            </div>
+        <h2 class="team-heading">Meet Our Team</h2>
 
-            <div class="col-md-4">
-                <article class="card team-card">
-                    <img class="card-img-top"
-                         src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
-                         alt="Portrait of Priya Patel, Customer Experience Manager">
-                    <div class="card-body">
-                        <h2 class="team-name">Priya Patel</h2>
-                        <p class="team-role">Customer Experience Manager</p>
-                        <p class="card-text">
-                            Priya helps customers compare vehicles and understand their options.
-                            She makes sure each customer receives attentive, personalized support.
-                        </p>
-                        <p class="team-email">
-                            <a href="mailto:priya.patel@bestcarsdealership.com">priya.patel@bestcarsdealership.com</a>
-                        </p>
-                    </div>
-                </article>
-            </div>
+        <section class="team-row" aria-label="Best Cars Dealership team members">
+            <article class="card team-member">
+                <img class="card-img-top"
+                     src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
+                     alt="Portrait of Jack Carter, Sales Manager">
+                <div class="card-body">
+                    <p class="title">Jack Carter</p>
+                    <p class="team-role"><strong>Role:</strong> Sales Manager</p>
+                    <p class="card-text">
+                        Jack has over ten years of experience helping customers choose vehicles.
+                        He leads the sales team and guides customers through the buying process.
+                    </p>
+                    <p class="team-email">
+                        <strong>Email:</strong>
+                        <a href="mailto:jack.carter@bestcars.com">jack.carter@bestcars.com</a>
+                    </p>
+                </div>
+            </article>
 
-            <div class="col-md-4">
-                <article class="card team-card">
-                    <img class="card-img-top"
-                         src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
-                         alt="Portrait of Daniel Brooks, Sales Specialist">
-                    <div class="card-body">
-                        <h2 class="team-name">Daniel Brooks</h2>
-                        <p class="team-role">Sales Specialist</p>
-                        <p class="card-text">
-                            Daniel explains vehicle features and assists with car selection.
-                            He guides customers through the dealership's sales process.
-                        </p>
-                        <p class="team-email">
-                            <a href="mailto:daniel.brooks@bestcarsdealership.com">daniel.brooks@bestcarsdealership.com</a>
-                        </p>
-                    </div>
-                </article>
-            </div>
+            <article class="card team-member">
+                <img class="card-img-top"
+                     src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
+                     alt="Portrait of Sarah Lawson, Customer Experience Manager">
+                <div class="card-body">
+                    <p class="title">Sarah Lawson</p>
+                    <p class="team-role"><strong>Role:</strong> Customer Experience Manager</p>
+                    <p class="card-text">
+                        Sarah welcomes customers and helps them find the right department.
+                        She makes sure every visitor receives friendly and helpful support.
+                    </p>
+                    <p class="team-email">
+                        <strong>Email:</strong>
+                        <a href="mailto:sarah.lawson@bestcars.com">sarah.lawson@bestcars.com</a>
+                    </p>
+                </div>
+            </article>
+
+            <article class="card team-member">
+                <img class="card-img-top"
+                     src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&amp;fit=crop&amp;w=600&amp;q=80"
+                     alt="Portrait of Daniel Brooks, Service Manager">
+                <div class="card-body">
+                    <p class="title">Daniel Brooks</p>
+                    <p class="team-role"><strong>Role:</strong> Service Manager</p>
+                    <p class="card-text">
+                        Daniel coordinates vehicle maintenance and service appointments.
+                        He works with the service team to keep customer vehicles safe and reliable.
+                    </p>
+                    <p class="team-email">
+                        <strong>Email:</strong>
+                        <a href="mailto:daniel.brooks@bestcars.com">daniel.brooks@bestcars.com</a>
+                    </p>
+                </div>
+            </article>
         </section>
-    </section>
-</main>
+    </main>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
