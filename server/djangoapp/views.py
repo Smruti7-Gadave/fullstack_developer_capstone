@@ -4,6 +4,7 @@ import requests
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import JsonResponse
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from .models import CarModel
 
@@ -105,3 +106,51 @@ def get_cars(request):
         {"CarMake": car.car_make.Name, "CarModel": car.Name, "Year": car.Year, "Type": car.Type}
         for car in cars
     ]})
+
+def login_page(request):
+    if request.user.is_authenticated:
+        return redirect("/")
+    error = ""
+    if request.method == "POST":
+        username = request.POST.get("username", "").strip()
+        password = request.POST.get("password", "")
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect("/")
+        error = "Invalid username or password."
+    return render(request, "login.html", {"error": error})
+
+
+def register_page(request):
+    if request.user.is_authenticated:
+        return redirect("/")
+    error = ""
+    if request.method == "POST":
+        username = request.POST.get("username", "").strip()
+        password = request.POST.get("password", "")
+        first_name = request.POST.get("first_name", "").strip()
+        last_name = request.POST.get("last_name", "").strip()
+        email = request.POST.get("email", "").strip()
+
+        if not username or not password:
+            error = "Username and password are required."
+        elif User.objects.filter(username=username).exists():
+            error = "That username is already registered. Choose another username."
+        else:
+            User.objects.create_user(
+                username=username,
+                password=password,
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+            )
+            return redirect("/login?registered=1")
+
+    return render(request, "register.html", {"error": error})
+
+
+def logout_page(request):
+    logout(request)
+    return redirect("/")
+
