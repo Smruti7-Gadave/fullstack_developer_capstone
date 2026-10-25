@@ -37,6 +37,16 @@ app.get("/health", (_req, res) => {
   res.json({ status: "ok", database: mongoose.connection.readyState === 1 ? "connected" : "disconnected" });
 });
 
+app.get("/analyze/:review", (req, res) => {
+  const review = String(req.params.review || "").toLowerCase();
+  const positiveWords = ["fantastic", "excellent", "great", "good", "wonderful", "amazing", "helpful", "friendly", "outstanding", "best"];
+  const negativeWords = ["terrible", "awful", "poor", "bad", "worst", "rude", "slow", "disappointing"];
+  const positive = positiveWords.some((word) => review.includes(word));
+  const negative = negativeWords.some((word) => review.includes(word));
+  const sentiment = positive && !negative ? "positive" : negative && !positive ? "negative" : "neutral";
+  res.json({ sentiment });
+});
+
 app.get("/fetchReviews", async (_req, res) => {
   try {
     res.json(await Reviews.find().lean());
