@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Dealers.css";
 import "../assets/style.css";
@@ -13,6 +13,8 @@ const PostReview = () => {
   const [date, setDate] = useState("");
   const [carModels, setCarModels] = useState([]);
   const [message, setMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const submittingRef = useRef(false);
 
   useEffect(() => {
     const load = async () => {
@@ -44,6 +46,7 @@ const PostReview = () => {
   const postReview = async (event) => {
     event.preventDefault();
     setMessage("");
+    if (submittingRef.current) return;
 
     const username = sessionStorage.getItem("username") || "";
     const firstName = sessionStorage.getItem("firstname") || "";
@@ -65,6 +68,8 @@ const PostReview = () => {
       return;
     }
 
+    submittingRef.current = true;
+    setSubmitting(true);
     try {
       const response = await fetch("/djangoapp/add_review", {
         method: "POST",
@@ -88,6 +93,9 @@ const PostReview = () => {
       window.location.href = `/dealer/${id}`;
     } catch (err) {
       setMessage(err.message || "Review could not be submitted.");
+    } finally {
+      submittingRef.current = false;
+      setSubmitting(false);
     }
   };
 
@@ -130,7 +138,7 @@ const PostReview = () => {
               onChange={(event) => setYear(event.target.value)}
             />
           </div>
-          <button className="postreview" type="submit">Post Review</button>
+          <button className="postreview" type="submit" disabled={submitting}>{submitting ? "Submitting..." : "Post Review"}</button>
           {message && <p role="alert">{message}</p>}
         </form>
       </main>
