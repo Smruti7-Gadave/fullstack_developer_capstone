@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "../assets/style.css";
 import "../assets/bootstrap.min.css";
 
@@ -39,7 +40,7 @@ const Header = () => {
         <div className="collapse navbar-collapse" id="navbarText">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link active" style={{ fontSize: "larger" }} href="/">Home</a>
+              <Link className="nav-link active" style={{ fontSize: "larger" }} to="/">Home</Link>
             </li>
             <li className="nav-item">
               <a className="nav-link" style={{ fontSize: "larger" }} href="/static/About.html">About Us</a>
@@ -57,8 +58,8 @@ const Header = () => {
                 </div>
               ) : (
                 <div className="input_panel">
-                  <a className="nav_item" href="/login">Login</a>
-                  <a className="nav_item" href="/register">Register</a>
+                  <Link className="nav_item" to="/login">Login</Link>
+                  <Link className="nav_item" to="/register">Register</Link>
                 </div>
               )}
             </div>
