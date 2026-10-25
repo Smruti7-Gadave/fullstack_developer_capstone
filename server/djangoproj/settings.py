@@ -138,7 +138,7 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATICFILES_DIRS = [BASE_DIR / 'frontend' / 'static', BASE_DIR / 'frontend' / 'build']
+STATICFILES_DIRS = [BASE_DIR / 'frontend' / 'static', BASE_DIR / 'frontend' / 'build' / 'static']
 
 STORAGES = {
     "default": {
