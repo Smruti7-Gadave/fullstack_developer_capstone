@@ -1,21 +1,39 @@
-# Cars Dealership Full-Stack Capstone Project
+# Best Cars Dealership — Full-Stack Capstone Project
 
-**Repository Name:** `xrwvm-fullstack_developer_capstone`
+Repository name: xrwvm-fullstack_developer_capstone
 
-**Project Name:** Cars Dealership Full-Stack Application
+Project name: Best Cars Dealership Full-Stack Application
 
-## Project Overview
+## Project overview
 
-The Cars Dealership Full-Stack Capstone Project is a full-stack web application for a car dealership retailer. It displays dealership locations, vehicle information, and customer reviews, and supports user registration, login, review submission, and review sentiment analysis.
+Best Cars Dealership is a full-stack web application developed as the IBM Full Stack Developer Capstone Project. The application allows users to browse car dealerships, view dealership details, filter dealers by state, register and log in, view customer reviews, submit reviews, and analyze the sentiment of review text.
 
-## Technologies
+## Main features
 
-- Frontend: React
-- Backend: Django and Node.js with Express
-- Databases: MongoDB and SQLite
-- Deployment: IBM Cloud Code Engine
+- Display all car dealerships with their IDs, names, cities, addresses, ZIP codes, and states.
+- Filter dealerships by state.
+- View individual dealership details and customer reviews.
+- Register users, authenticate login sessions, and log out.
+- Submit dealership reviews with vehicle and purchase details.
+- Display car makes and models.
+- Analyze customer review text and return positive, negative, or neutral sentiment.
+- Manage car makes and models through the Django admin interface.
+
+## Technology stack
+
+- Frontend: React, JavaScript, HTML, CSS, Bootstrap
+- Backend: Python, Django, Node.js, Express
+- Data storage: SQLite, MongoDB, JSON seed data
+- Deployment: IBM Cloud Code Engine and Skills Network Labs
 - CI/CD: GitHub Actions
 
-## Project Objective
+## Repository structure
 
-Build and deploy a full-stack dealership application that allows visitors to browse dealerships, view dealership details, register and authenticate, and submit and read customer reviews.
+- `server/frontend/` — React application and static pages
+- `server/djangoapp/` — Django application, models, views, and API routes
+- `server/database/` — Node.js/Express API, MongoDB models, and seed data
+- `.github/workflows/` — GitHub Actions workflow
+
+## Project objective
+
+The objective is to build, test, and deploy a complete dealership application that combines a responsive frontend, Django backend, dealership and review APIs, user authentication, database integration, and automated code validation.
