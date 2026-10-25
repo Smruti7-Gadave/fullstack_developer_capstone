@@ -1,6 +1,7 @@
 import json
 import os
 import requests
+from pathlib import Path
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import JsonResponse
@@ -63,28 +64,65 @@ def registration(request):
     )
     return JsonResponse({"message": "Registration successful. You can now log in.", "userName": user.username}, status=201)
 
+DATA_DIR = Path(__file__).resolve().parent.parent / "database" / "data"
+
+
+def _load_json_collection(filename, collection):
+    file_path = DATA_DIR / filename
+    with open(file_path, "r", encoding="utf-8") as file:
+        data = json.load(file)
+    return data.get(collection, [])
+
+
 def get_dealerships(request, state=None):
     try:
-        endpoint = "fetchDealers" if not state or state.lower() == "all" else f"fetchDealers/{state}"
-        return JsonResponse({"status": 200, "dealers": _node_get(endpoint)})
-    except requests.RequestException as error:
-        return JsonResponse({"status": 503, "error": str(error)}, status=503)
+        dealers = _load_json_collection("dealerships.json", "dealerships")
+
+        if state and state.lower() != "all":
+            dealers = [
+                dealer for dealer in dealers
+                if dealer.get("state", "").lower() == state.lower()
+                or dealer.get("st", "").lower() == state.lower()
+            ]
+
+        return JsonResponse({"status": 200, "dealers": dealers})
+    except (OSError, ValueError, KeyError) as error:
+        return JsonResponse({"status": 500, "error": str(error)}, status=500)
+
 
 def get_dealer_details(request, dealer_id):
     try:
-        return JsonResponse({"status": 200, "dealer": _node_get(f"fetchDealer/{dealer_id}")})
-    except requests.RequestException as error:
-        return JsonResponse({"status": 503, "error": str(error)}, status=503)
+        dealers = _load_json_collection("dealerships.json", "dealerships")
+        dealer = [
+            item for item in dealers
+            if int(item.get("id", 0)) == dealer_id
+        ]
+
+        if not dealer:
+            return JsonResponse(
+                {"status": 404, "error": "Dealership not found"},
+                status=404
+            )
+
+        return JsonResponse({"status": 200, "dealer": dealer})
+    except (OSError, ValueError, KeyError) as error:
+        return JsonResponse({"status": 500, "error": str(error)}, status=500)
+
 
 def get_dealer_reviews(request, dealer_id):
     try:
-        reviews = _node_get(f"fetchReviews/dealer/{dealer_id}")
+        all_reviews = _load_json_collection("reviews.json", "reviews")
+        reviews = [
+            review for review in all_reviews
+            if int(review.get("dealership", 0)) == dealer_id
+        ]
+
         for review in reviews:
             review["sentiment"] = _sentiment(review.get("review", ""))
-        return JsonResponse({"status": 200, "reviews": reviews})
-    except requests.RequestException as error:
-        return JsonResponse({"status": 503, "error": str(error)}, status=503)
 
+        return JsonResponse({"status": 200, "reviews": reviews})
+    except (OSError, ValueError, KeyError) as error:
+        return JsonResponse({"status": 500, "error": str(error)}, status=500)
 @csrf_exempt
 def add_review(request):
     if request.method != "POST":
