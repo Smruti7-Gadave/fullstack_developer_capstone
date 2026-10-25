@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - Best Cars Dealership</title>
 
-    <!-- Load Bootstrap first and the custom stylesheet after it. -->
-    <link rel="stylesheet" href="/static/bootstrap.min.css">
+    <!-- Match the stylesheet paths used by the dealership home page. -->
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
 
     <style>
         .contact-header {
@@ -15,7 +15,8 @@
             padding: 30px 15px;
         }
 
-        .contact-panel {
+        .contact-card {
+            width: 90%;
             margin: 20px auto 40px;
             padding: 24px;
         }
@@ -23,7 +24,7 @@
         .contact-image {
             display: block;
             width: 100%;
-            height: 260px;
+            height: 250px;
             margin-bottom: 16px;
             object-fit: cover;
             border-radius: 8px;
@@ -37,6 +38,11 @@
             margin-bottom: 16px;
         }
 
+        .contact-info h3 {
+            margin-top: 20px;
+            font-size: 1.15rem;
+        }
+
         .contact-info p {
             margin-bottom: 14px;
         }
@@ -44,98 +50,97 @@
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color: darkturquoise;">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">Dealerships</a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarText" aria-controls="navbarText"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarText">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/about">About Us</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/contact">Contact Us</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<main class="container">
-    <header class="contact-header">
-        <h1>Contact Us</h1>
-        <p class="lead">We are here to help you find your perfect car.</p>
-    </header>
-
-    <section class="card contact-panel">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-                <img src="/static/contactus.png"
-                     alt="Contact the Best Cars Dealership team"
-                     class="contact-image">
-                <img src="/static/car_dealership.jpg"
-                     alt="Best Cars Dealership showroom"
-                     class="contact-image">
-            </div>
-
-            <div class="col-md-6 contact-info">
-                <h2>Get in Touch</h2>
-                <p>
-                    Have a question about a vehicle, a dealership, or a customer review?
-                    Contact our team and we will be happy to assist you.
-                </p>
-
-                <p>
-                    <strong>Dealership Name:</strong><br>
-                    Best Cars Dealership
-                </p>
-
-                <p>
-                    <strong>Address:</strong><br>
-                    123 Main Street, Wichita, KS 67202, United States
-                </p>
-
-                <p>
-                    <strong>Telephone / Phone:</strong><br>
-                    <a href="tel:+13165550147">+1 (316) 555-0147</a>
-                </p>
-
-                <p>
-                    <strong>Email:</strong><br>
-                    <a href="mailto:contact@bestcarsdealership.com">contact@bestcarsdealership.com</a>
-                </p>
-
-                <p>
-                    <strong>Customer Support:</strong><br>
-                    <a href="mailto:support@bestcarsdealership.com">support@bestcarsdealership.com</a>
-                </p>
-
-                <p>
-                    <strong>Business Hours:</strong><br>
-                    Monday - Friday: 9:00 AM - 6:00 PM<br>
-                    Saturday: 10:00 AM - 4:00 PM<br>
-                    Sunday: Closed
-                </p>
-
-                <p>
-                    <strong>Departments:</strong><br>
-                    Vehicle Sales and Enquiries<br>
-                    Customer Service and Reviews<br>
-                    Vehicle Purchase Assistance
-                </p>
+<div>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: darkturquoise; height: 1in;">
+        <div class="container-fluid">
+            <h2 style="padding-right: 5%;">Dealerships</h2>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarText" aria-controls="navbarText"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" style="font-size: larger;" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="font-size: larger;" href="/about">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" style="font-size: larger;"
+                           aria-current="page" href="/contact">Contact Us</a>
+                    </li>
+                </ul>
             </div>
         </div>
-    </section>
-</main>
+    </nav>
+
+    <main class="container">
+        <header class="contact-header">
+            <h1>Contact Us</h1>
+            <p class="lead">Contact the Best Cars Dealership team. We are happy to help.</p>
+        </header>
+
+        <section class="card contact-card">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <img src="/static/cars.jpeg"
+                         alt="Cars available at Best Cars Dealership"
+                         class="contact-image">
+                    <img src="/static/contactus.png"
+                         alt="Contact Best Cars Dealership customer service"
+                         class="contact-image">
+                </div>
+
+                <div class="col-md-6 contact-info">
+                    <h2>Get in Touch</h2>
+                    <p>
+                        Have questions about our vehicles, services, or dealership?
+                        Contact the appropriate team using the details below.
+                    </p>
+
+                    <p>
+                        <strong>Dealership Name:</strong><br>
+                        Best Cars Dealership
+                    </p>
+
+                    <p>
+                        <strong>Address:</strong><br>
+                        123 Main Street, Wichita, KS 67202, United States
+                    </p>
+
+                    <h3>Contact Customer Service</h3>
+                    <p><a href="mailto:support@bestcars.com">support@bestcars.com</a></p>
+
+                    <h3>Contact our National Advertising Team</h3>
+                    <p><a href="mailto:NationalSales@bestcars.com">NationalSales@bestcars.com</a></p>
+
+                    <h3>Contact our Public Relations Team</h3>
+                    <p><a href="mailto:PR@bestcars.com">PR@bestcars.com</a></p>
+
+                    <h3>Office Phone</h3>
+                    <p><a href="tel:3126111111">312-611-1111</a></p>
+
+                    <h3>Business Hours</h3>
+                    <p>
+                        Monday - Friday: 9:00 AM - 6:00 PM<br>
+                        Saturday: 10:00 AM - 4:00 PM<br>
+                        Sunday: Closed
+                    </p>
+
+                    <h3>Become a Best Cars Dealer</h3>
+                    <p>
+                        Visit
+                        <a href="https://growwithbestcars.com" target="_blank"
+                           rel="noopener noreferrer">growwithbestcars.com</a>
+                        for dealership information.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
