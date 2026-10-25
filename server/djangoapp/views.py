@@ -127,16 +127,65 @@ def get_dealer_reviews(request, dealer_id):
 def add_review(request):
     if request.method != "POST":
         return JsonResponse({"error": "POST required"}, status=405)
+
     try:
         data = json.loads(request.body or b"{}")
     except (ValueError, UnicodeDecodeError):
         return JsonResponse({"status": 400, "error": "Invalid JSON"}, status=400)
+
+    required_fields = [
+        "name", "dealership", "review", "purchase",
+        "purchase_date", "car_make", "car_model", "car_year"
+    ]
+    missing = [
+        field for field in required_fields
+        if data.get(field) is None or data.get(field) == ""
+    ]
+    if missing:
+        return JsonResponse(
+            {"status": 400, "error": "Missing required review fields", "missing": missing},
+            status=400
+        )
+
     try:
-        response = requests.post(f"{NODE_API}/insert_review", json=data, timeout=10)
-        response.raise_for_status()
-        return JsonResponse({"status": 200, "review": response.json()})
-    except requests.RequestException as error:
-        return JsonResponse({"status": 503, "error": str(error)}, status=503)
+        dealer_id = int(data["dealership"])
+        car_year = int(data["car_year"])
+        reviews_path = DATA_DIR / "reviews.json"
+
+        with open(reviews_path, "r", encoding="utf-8") as file:
+            collection = json.load(file)
+
+        reviews = collection.setdefault("reviews", [])
+        next_id = max((int(item.get("id", 0)) for item in reviews), default=0) + 1
+
+        new_review = {
+            "id": next_id,
+            "name": str(data["name"]).strip(),
+            "dealership": dealer_id,
+            "review": str(data["review"]).strip(),
+            "purchase": bool(data["purchase"]),
+            "purchase_date": str(data["purchase_date"]),
+            "car_make": str(data["car_make"]).strip(),
+            "car_model": str(data["car_model"]).strip(),
+            "car_year": car_year,
+            "sentiment": _sentiment(data["review"]),
+        }
+
+        if not new_review["name"] or not new_review["review"]:
+            return JsonResponse(
+                {"status": 400, "error": "Name and review text cannot be empty"},
+                status=400
+            )
+
+        reviews.append(new_review)
+        temporary_path = reviews_path.with_suffix(".json.tmp")
+        with open(temporary_path, "w", encoding="utf-8") as file:
+            json.dump(collection, file, ensure_ascii=False, indent=2)
+        os.replace(temporary_path, reviews_path)
+
+        return JsonResponse({"status": 200, "review": new_review})
+    except (OSError, ValueError, TypeError, KeyError) as error:
+        return JsonResponse({"status": 500, "error": str(error)}, status=500)
 
 def get_cars(request):
     cars = CarModel.objects.select_related("car_make").order_by("car_make__Name", "Name")
