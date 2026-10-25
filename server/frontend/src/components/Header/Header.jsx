@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Link } from "react-router-dom";
 import "../assets/style.css";
 import "../assets/bootstrap.min.css";
 
